@@ -34,6 +34,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // Garante que 'flash' sempre seja um array, evitando o erro undefined
+            'flash' => [
+                'message' => fn() => $request->session()->get('message'),
+                'error' => fn() => $request->session()->get('error'),
+            ],
         ];
     }
 }
