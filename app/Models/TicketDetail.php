@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TicketDetail extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['ticket_id', 'description', 'processed_data'];
 
     protected $casts = [
