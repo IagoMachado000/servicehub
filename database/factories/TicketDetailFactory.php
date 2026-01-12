@@ -26,4 +26,14 @@ class TicketDetailFactory extends Factory
             'processed_at' => now()->toIso8601String(),
         ];
     }
+
+    public function pending(): static
+    {
+        return $this->state(fn(array $attributes) => [
+            'summary' => null,
+            'keywords' => null,
+            'processed_at' => null,
+            'sentiment_score' => 0.0,
+        ]);
+    }
 }
