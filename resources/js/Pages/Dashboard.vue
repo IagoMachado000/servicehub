@@ -2,54 +2,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
-// Mock de dados para visualização (depois virão do Backend)
-const stats = [
-    {
-        title: "Total de Tickets",
-        value: "12",
-        icon: "M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776",
-        color: "text-blue-600",
-        bg: "bg-blue-50",
-    },
-    {
-        title: "Em Processamento",
-        value: "4",
-        icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99",
-        color: "text-amber-600",
-        bg: "bg-amber-50",
-    },
-    {
-        title: "Concluídos",
-        value: "8",
-        icon: "M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-        color: "text-emerald-600",
-        bg: "bg-emerald-50",
-    },
-];
-
-const recentTickets = [
-    {
-        id: 102,
-        title: "Erro na integração de pagamento",
-        project: "E-commerce V1",
-        status: "Aberto",
-        date: "Hoje, 10:23",
-    },
-    {
-        id: 101,
-        title: "Ajuste de layout na home",
-        project: "Landing Page",
-        status: "Processando",
-        date: "Ontem, 16:40",
-    },
-    {
-        id: 99,
-        title: "Bug no login social",
-        project: "App Mobile",
-        status: "Concluído",
-        date: "10 Jan, 09:15",
-    },
-];
+// Recebendo os dados reais do Controller
+const props = defineProps({
+    stats: Object,
+    recentTickets: Array,
+});
 </script>
 
 <template>
@@ -107,126 +64,173 @@ const recentTickets = [
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
                     <div
-                        v-for="(stat, index) in stats"
-                        :key="index"
-                        class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 p-6 flex items-center"
+                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-indigo-500"
                     >
-                        <div
-                            :class="`p-3 rounded-full ${stat.bg} ${stat.color} mr-4`"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-8 h-8"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    :d="stat.icon"
-                                />
-                            </svg>
+                        <div class="text-gray-500 text-sm font-medium">
+                            Total Tickets
                         </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">
-                                {{ stat.title }}
-                            </p>
-                            <p class="text-2xl font-bold text-gray-900">
-                                {{ stat.value }}
-                            </p>
+                        <div class="mt-2 text-3xl font-bold text-gray-900">
+                            {{ stats.total }}
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-400"
+                    >
+                        <div class="text-gray-500 text-sm font-medium">
+                            Na Fila (Pendente)
+                        </div>
+                        <div class="mt-2 text-3xl font-bold text-gray-900">
+                            {{ stats.pending }}
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500"
+                    >
+                        <div class="text-gray-500 text-sm font-medium">
+                            Processados (Open)
+                        </div>
+                        <div class="mt-2 text-3xl font-bold text-gray-900">
+                            {{ stats.open }}
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-red-500"
+                    >
+                        <div class="text-gray-500 text-sm font-medium">
+                            Falhas
+                        </div>
+                        <div class="mt-2 text-3xl font-bold text-gray-900">
+                            {{ stats.failed }}
                         </div>
                     </div>
                 </div>
-
-                <div
-                    class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100"
-                >
-                    <div
-                        class="p-6 border-b border-gray-100 flex justify-between items-center bg-white"
-                    >
-                        <h3 class="text-lg font-bold text-gray-900">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">
                             Tickets Recentes
                         </h3>
-                        <Link
-                            href="#"
-                            class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-                            >Ver todos &rarr;</Link
-                        >
-                    </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead
-                                class="bg-gray-50 text-gray-500 font-medium border-b border-gray-100"
-                            >
-                                <tr>
-                                    <th class="px-6 py-3">ID</th>
-                                    <th class="px-6 py-3">Assunto</th>
-                                    <th class="px-6 py-3">Projeto</th>
-                                    <th class="px-6 py-3">Status</th>
-                                    <th class="px-6 py-3">Data</th>
-                                    <th class="px-6 py-3"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <tr
-                                    v-for="ticket in recentTickets"
-                                    :key="ticket.id"
-                                    class="hover:bg-gray-50 transition-colors"
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            ID
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Título
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Projeto
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Status
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Data
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody
+                                    class="bg-white divide-y divide-gray-200"
                                 >
-                                    <td
-                                        class="px-6 py-4 font-medium text-gray-900"
+                                    <tr
+                                        v-for="ticket in recentTickets"
+                                        :key="ticket.id"
                                     >
-                                        #{{ ticket.id }}
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-700">
-                                        {{ ticket.title }}
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-500">
-                                        {{ ticket.project }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                                            :class="{
-                                                'bg-blue-50 text-blue-700':
-                                                    ticket.status === 'Aberto',
-                                                'bg-amber-50 text-amber-700':
-                                                    ticket.status ===
-                                                    'Processando',
-                                                'bg-green-50 text-green-700':
-                                                    ticket.status ===
-                                                    'Concluído',
-                                            }"
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                         >
-                                            {{ ticket.status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-500">
-                                        {{ ticket.date }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <Link
-                                            :href="route('tickets.show', 50)"
-                                            class="text-indigo-600 hover:text-indigo-900 font-medium"
+                                            #{{ ticket.id }}
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                         >
-                                            Detalhes
-                                        </Link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                            {{ ticket.title }}
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                        >
+                                            {{ ticket.project }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                :class="{
+                                                    'bg-green-100 text-green-800':
+                                                        ticket.status ===
+                                                        'open',
+                                                    'bg-yellow-100 text-yellow-800':
+                                                        ticket.status ===
+                                                        'pending',
+                                                    'bg-red-100 text-red-800':
+                                                        ticket.status ===
+                                                        'failed',
+                                                }"
+                                            >
+                                                {{
+                                                    ticket.status.toUpperCase()
+                                                }}
+                                            </span>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                        >
+                                            {{ ticket.created_at_formatted }}
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                                        >
+                                            <Link
+                                                :href="
+                                                    route(
+                                                        'tickets.show',
+                                                        ticket.id
+                                                    )
+                                                "
+                                                class="text-indigo-600 hover:text-indigo-900"
+                                            >
+                                                Detalhes
+                                            </Link>
+                                        </td>
+                                    </tr>
 
-                    <div
-                        v-if="recentTickets.length === 0"
-                        class="p-12 text-center"
-                    >
-                        <p class="text-gray-500">Nenhum ticket encontrado.</p>
+                                    <tr v-if="recentTickets.length === 0">
+                                        <td
+                                            colspan="6"
+                                            class="px-6 py-12 text-center text-gray-500"
+                                        >
+                                            Nenhum ticket encontrado.
+                                            <Link
+                                                :href="route('tickets.create')"
+                                                class="text-indigo-600 underline"
+                                                >Crie o primeiro!</Link
+                                            >
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
