@@ -19,7 +19,7 @@ class UserProfileFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'phone' => fake()->phoneNumber(),
+            'phone' => fake()->numerify('(##) 9####-####'),
             'job_title' => fake()->jobTitle(),
         ];
     }
