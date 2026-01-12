@@ -41,7 +41,7 @@ class TicketProcessedNotification extends Notification
             ->greeting("Olá, {$notifiable->name}")
             ->line("O seu ticket '{$this->ticket->title}' foi processado com sucesso.")
             ->line("Status atual: " . strtoupper($this->ticket->status))
-            ->action('Ver Ticket', url('/tickets/' . $this->ticket->id))
+            ->action('Ver Ticket', url('/tickets/show/' . $this->ticket->id))
             ->line('Nossa equipe técnica já está analisando os dados extraídos.');
     }
 

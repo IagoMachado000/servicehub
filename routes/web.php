@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('tickets')->group(function () {
         Route::name('tickets')->group(function () {
+            Route::get('/', [TicketController::class, 'index'])->name('.index');
             Route::get('/create', [TicketController::class, 'create'])->name('.create');
             Route::post('/store', [TicketController::class, 'store'])->name('.store');
             Route::get('/show/{ticket}', [TicketController::class, 'show'])->name('.show');

@@ -73,7 +73,7 @@ const sentimentLabel = computed(() => {
                     </span>
                 </div>
                 <Link
-                    :href="route('dashboard')"
+                    :href="route('tickets.index')"
                     class="text-sm text-indigo-600 hover:text-indigo-800"
                 >
                     &larr; Voltar
