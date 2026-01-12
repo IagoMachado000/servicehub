@@ -24,6 +24,19 @@ const submit = () => {
     });
 };
 
+const isValidFileType = (file) => {
+    const validTypes = ["application/json", "text/plain"];
+    const validExtensions = ["json", "txt"];
+
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    // Verificamos MIME type OU extensão
+    return (
+        validTypes.includes(file.type) ||
+        validExtensions.includes(fileExtension)
+    );
+};
+
 // --- Lógica de Upload (Arrastar e Clicar) ---
 
 const isDragging = ref(false);
@@ -31,7 +44,18 @@ const isDragging = ref(false);
 // 1. Função para o Clique
 const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
+
     if (file) {
+        if (!isValidFileType(file)) {
+            form.setError(
+                "attachment",
+                "Apenas arquivos JSON ou TXT são permitidos."
+            );
+            form.attachment = null;
+            e.target.value = null;
+            return;
+        }
+
         form.attachment = file;
         form.clearErrors("attachment");
     }
@@ -43,7 +67,18 @@ const handleDrop = (e) => {
     isDragging.value = false;
 
     if (e.dataTransfer.files.length > 0) {
-        form.attachment = e.dataTransfer.files[0];
+        const file = e.dataTransfer.files[0];
+
+        if (!isValidFileType(file)) {
+            form.setError(
+                "attachment",
+                "Apenas arquivos JSON ou TXT são permitidos."
+            );
+            form.attachment = null;
+            return;
+        }
+
+        form.attachment = file;
         form.clearErrors("attachment");
     }
 };
@@ -187,6 +222,7 @@ const handleDrop = (e) => {
                                     <input
                                         type="file"
                                         class="sr-only"
+                                        accept=".json,.txt,application/json,text/plain"
                                         @change="handleFileUpload"
                                     />
 

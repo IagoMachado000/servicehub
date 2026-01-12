@@ -28,4 +28,15 @@ class StoreTicketRequest extends FormRequest
             'description' => ['nullable', 'string'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'project_id.required' => 'Selecione o projeto.',
+            'title.required' => 'Insira o assunto do ticket.',
+            'title.max' => 'Esse campo deve ter no máximo :max caracteres.',
+            'attachment.mimes' => 'Apenas arquivos JSON ou TXT são permitidos.',
+            'attachment.max' => 'O arquivo deve ter no máximo :max MB'
+        ];
+    }
 }
