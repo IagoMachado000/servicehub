@@ -14,29 +14,36 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Cria 3 Empresas
+        // Cria 3 Empresas
         Company::factory(3)->create()->each(function ($company) {
 
-            // 2. Para cada empresa, cria 3 Projetos
-            Project::factory(3)
-                ->for($company)
-                ->create()
-                ->each(function ($project) {
+            // Cada empresa tem 3 Projetos
+            Project::factory(3)->for($company)->create()->each(function ($project) {
 
-                    // 3. Para cada projeto, cria 3 Usuários com Perfil
-                    $projectUsers = User::factory(3)
-                        ->has(UserProfile::factory(), 'profile')
-                        ->create();
+                // Cada projeto tem 3 Usuários com Perfil
+                $projectUsers = User::factory(3)
+                    ->has(UserProfile::factory(), 'profile')
+                    ->create();
 
-                    // 4. Para cada projeto, cria entre 5 e 15 Tickets
-                    Ticket::factory(rand(5, 15))
+                // Cria entre 5 e 15 Tickets por projeto
+                for ($i = 0; $i < rand(5, 15); $i++) {
+                    $status = fake()->randomElement(['open', 'pending', 'failed']);
+
+                    $ticket = Ticket::factory()
                         ->for($project)
-                        // Distribui os tickets entre os 3 usuários criados acima
                         ->recycle($projectUsers)
-                        // Cria o detalhe para cada ticket
-                        ->has(TicketDetail::factory(), 'detail')
-                        ->create();
-                });
+                        ->create(['status' => $status]);
+
+                    // Ajusta o detalhe baseado no status do ticket
+                    $detailFactory = TicketDetail::factory()->for($ticket);
+
+                    if ($status === 'pending' || $status === 'failed') {
+                        $detailFactory->pending()->create();
+                    } else {
+                        $detailFactory->create();
+                    }
+                }
+            });
         });
     }
 }
