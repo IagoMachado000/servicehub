@@ -23,13 +23,9 @@ const formatDate = (dateString) => {
 const statusClass = computed(() => {
     switch (props.ticket.status) {
         case "open":
-            return "bg-blued-100 text-blued-800 border-blued-200";
+            return "bg-green-100 text-green-800 border-green-200";
         case "pending":
             return "bg-yellow-100 text-yellow-800 border-yellow-200";
-        case "done":
-            return "bg-green-100 text-green-800 border-green-200";
-        case "closed":
-            return "bg-gray-100 text-gray-800 border-gray-200";
         case "failed":
             return "bg-red-100 text-red-800 border-red-200";
         default:
@@ -86,9 +82,9 @@ const sentimentLabel = computed(() => {
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 xl:px-8">
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="xl:col-span-2 space-y-6">
                         <div
                             class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6"
                         >

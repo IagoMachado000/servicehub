@@ -108,11 +108,8 @@ const bottomNavLinkClasses = (isActive) => {
                     >
                 </div>
 
-                <header
-                    class="hidden lg:flex flex-1 items-center"
-                    v-if="$slots.header"
-                >
-                    <div class="w-full mr-5 lg:mr-10">
+                <header class="flex flex-1 items-center" v-if="$slots.header">
+                    <div class="w-full mr-3 sm:mr-5 lg:mr-10">
                         <slot name="header" />
                     </div>
                 </header>

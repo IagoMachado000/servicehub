@@ -90,12 +90,14 @@ const handleDrop = (e) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2
+                    class="hidden lg:blockfont-semibold text-xl text-gray-800 leading-tight"
+                >
                     Gestão de Tickets
                 </h2>
                 <Link
                     :href="route('tickets.index')"
-                    class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                    class="text-sm text-indigo-600 hover:text-indigo-800 font-medium ml-auto lg:ml-0"
                 >
                     &larr; Voltar
                 </Link>
@@ -246,7 +248,7 @@ const handleDrop = (e) => {
                                         </svg>
 
                                         <div
-                                            class="mt-4 flex text-sm leading-6 text-gray-600 justify-center"
+                                            class="mt-4 flex flex-col sm:flex-row text-sm leading-6 text-gray-600 justify-center"
                                         >
                                             <span
                                                 class="font-semibold text-indigo-600 hover:text-indigo-500"
