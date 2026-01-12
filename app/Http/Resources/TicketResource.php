@@ -20,6 +20,11 @@ class TicketResource extends JsonResource
             'project' => $this->project->name ?? 'N/A',
             'status' => $this->status,
             'created_at_formatted' => $this->created_at->format('d/m/Y H:i'),
+            'opener' => [
+                'name' => $this->user->name,
+                'job_title' => $this->user->profile?->job_title ?? 'Não informado',
+                'phone' => $this->user->profile?->phone ?? 'Não informado',
+            ],
         ];
     }
 }

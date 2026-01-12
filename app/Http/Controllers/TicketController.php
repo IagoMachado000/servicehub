@@ -23,7 +23,7 @@ class TicketController extends Controller
         // Busca os tickets do usuário logado, com relacionamentos necessários
         // Ordena pelos mais recentes e pagina 10 por vez
         $tickets = TicketResource::collection(
-            Ticket::with('project')->where('user_id', Auth::id())->latest()->paginate(10)
+            Ticket::with(['project', 'user.profile'])->where('user_id', Auth::id())->latest()->paginate(10)
         );
 
         return Inertia::render('Tickets/Index', [

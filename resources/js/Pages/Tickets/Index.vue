@@ -11,14 +11,11 @@ defineProps({
 // Função auxiliar para cor do status
 const statusColor = (status) => {
     const colors = {
-        open: "bg-green-100 text-green-800",
+        open: "bg-blue-100 text-blue-800",
         pending: "bg-yellow-100 text-yellow-800",
+        done: "bg-green-100 text-green-800",
+        closed: "bg-gray-100 text-gray-800",
         failed: "bg-red-100 text-red-800",
-        // Fallbacks para nomes em português se sua base estiver assim
-        aberto: "bg-blue-100 text-blue-800",
-        em_andamento: "bg-yellow-100 text-yellow-800",
-        resolvido: "bg-green-100 text-green-800",
-        fechado: "bg-gray-100 text-gray-800",
     };
     return colors[status] || "bg-gray-100 text-gray-800";
 };
@@ -104,6 +101,11 @@ const statusColor = (status) => {
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                         >
+                                            Solicitante
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
                                             Status
                                         </th>
                                         <th
@@ -140,6 +142,15 @@ const statusColor = (status) => {
                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                         >
                                             {{ ticket.project }}
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                        >
+                                            {{ ticket.opener.name }}
+                                            <p class="text-xs">
+                                                {{ ticket.opener.job_title }} •
+                                                {{ ticket.opener.phone }}
+                                            </p>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
