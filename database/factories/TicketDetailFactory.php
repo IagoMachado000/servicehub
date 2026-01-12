@@ -20,23 +20,10 @@ class TicketDetailFactory extends Factory
         return [
             'ticket_id' => Ticket::factory(),
             'description' => fake()->paragraph(),
-            'processed_data' => null,
+            'summary' => fake()->sentence(),
+            'keywords' => fake()->words(5),
+            'sentiment_score' => fake()->randomFloat(2, -1, 1),
+            'processed_at' => now()->toIso8601String(),
         ];
-    }
-
-    /**
-     * Estado para simular que o Job já processou o anexo.
-     */
-    public function processed(): static
-    {
-        return $this->state(fn(array $attributes) => [
-            'processed_data' => [
-                // Aqui é definida a estrutura JSON que o Job geraria
-                'summary' => fake()->sentence(),
-                'keywords' => fake()->words(5),
-                'sentiment_score' => fake()->randomFloat(2, 0, 1),
-                'processed_at' => now()->toIso8601String(),
-            ],
-        ]);
     }
 }
