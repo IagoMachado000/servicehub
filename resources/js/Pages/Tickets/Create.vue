@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
@@ -23,9 +24,63 @@ const submit = () => {
     });
 };
 
-// Função auxiliar para mostrar o nome do arquivo selecionado (UX)
+const isValidFileType = (file) => {
+    const validTypes = ["application/json", "text/plain"];
+    const validExtensions = ["json", "txt"];
+
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    // Verificamos MIME type OU extensão
+    return (
+        validTypes.includes(file.type) ||
+        validExtensions.includes(fileExtension)
+    );
+};
+
+// --- Lógica de Upload (Arrastar e Clicar) ---
+
+const isDragging = ref(false);
+
+// 1. Função para o Clique
 const handleFileUpload = (e) => {
-    form.attachment = e.target.files[0];
+    const file = e.target.files?.[0];
+
+    if (file) {
+        if (!isValidFileType(file)) {
+            form.setError(
+                "attachment",
+                "Apenas arquivos JSON ou TXT são permitidos."
+            );
+            form.attachment = null;
+            e.target.value = null;
+            return;
+        }
+
+        form.attachment = file;
+        form.clearErrors("attachment");
+    }
+};
+
+// 2. Função para o Drop (Arrastar)
+const handleDrop = (e) => {
+    e.preventDefault();
+    isDragging.value = false;
+
+    if (e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+
+        if (!isValidFileType(file)) {
+            form.setError(
+                "attachment",
+                "Apenas arquivos JSON ou TXT são permitidos."
+            );
+            form.attachment = null;
+            return;
+        }
+
+        form.attachment = file;
+        form.clearErrors("attachment");
+    }
 };
 </script>
 
@@ -152,10 +207,31 @@ const handleFileUpload = (e) => {
 
                             <div>
                                 <InputLabel value="Anexo (JSON ou TXT)" />
-                                <div
-                                    class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 hover:bg-gray-50 transition duration-150 cursor-pointer relative"
+
+                                <label
+                                    @dragover.prevent.stop="isDragging = true"
+                                    @dragleave.prevent.stop="isDragging = false"
+                                    @drop.prevent.stop="handleDrop"
+                                    :class="[
+                                        isDragging
+                                            ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200'
+                                            : 'border-gray-300 hover:bg-gray-50',
+                                        'mt-2 flex justify-center rounded-lg border border-dashed px-6 py-10 transition duration-150 cursor-pointer relative w-full',
+                                    ]"
                                 >
-                                    <div class="text-center">
+                                    <input
+                                        type="file"
+                                        class="sr-only"
+                                        accept=".json,.txt,application/json,text/plain"
+                                        @change="handleFileUpload"
+                                    />
+
+                                    <div
+                                        class="text-center"
+                                        :class="{
+                                            'pointer-events-none': isDragging,
+                                        }"
+                                    >
                                         <svg
                                             class="mx-auto h-12 w-12 text-gray-300"
                                             viewBox="0 0 24 24"
@@ -172,41 +248,35 @@ const handleFileUpload = (e) => {
                                         <div
                                             class="mt-4 flex text-sm leading-6 text-gray-600 justify-center"
                                         >
-                                            <label
-                                                for="file-upload"
-                                                class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            <span
+                                                class="font-semibold text-indigo-600 hover:text-indigo-500"
                                             >
-                                                <span
-                                                    >Fazer upload de um
-                                                    arquivo</span
-                                                >
-                                                <input
-                                                    id="file-upload"
-                                                    name="file-upload"
-                                                    type="file"
-                                                    class="sr-only"
-                                                    @change="handleFileUpload"
-                                                />
-                                            </label>
+                                                Fazer upload de um arquivo
+                                            </span>
                                             <p class="pl-1">
                                                 ou arraste e solte
                                             </p>
                                         </div>
+
                                         <p
                                             class="text-xs leading-5 text-gray-600"
                                         >
                                             JSON ou TXT até 2MB
                                         </p>
 
-                                        <p
+                                        <div
                                             v-if="form.attachment"
-                                            class="mt-2 text-sm text-emerald-600 font-semibold bg-emerald-50 py-1 px-3 rounded-full inline-block"
+                                            class="mt-4 animate-pulse"
                                         >
-                                            Arquivo selecionado:
-                                            {{ form.attachment.name }}
-                                        </p>
+                                            <p
+                                                class="text-sm text-emerald-600 font-semibold bg-emerald-50 py-1 px-3 rounded-full inline-flex items-center gap-2 border border-emerald-100"
+                                            >
+                                                <span>📄</span>
+                                                {{ form.attachment.name }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </label>
                                 <InputError
                                     :message="form.errors.attachment"
                                     class="mt-2"
