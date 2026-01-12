@@ -15,7 +15,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <div>
+                <div class="hidden lg:block">
                     <h2 class="text-2xl font-bold leading-tight text-gray-900">
                         Visão Geral
                     </h2>
@@ -26,7 +26,7 @@ const props = defineProps({
 
                 <Link
                     :href="route('tickets.create')"
-                    class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 gap-2 shadow-sm"
+                    class="inline-flex items-center p-1 sm:px-4 sm:py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 gap-2 shadow-sm ml-auto lg:ml-0"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@ const props = defineProps({
                         class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-400"
                     >
                         <div class="text-gray-500 text-sm font-medium">
-                            Na Fila (Pendente)
+                            Na Fila (Pending)
                         </div>
                         <div class="mt-2 text-3xl font-bold text-gray-900">
                             {{ stats.pending }}
@@ -102,7 +102,7 @@ const props = defineProps({
                         class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-red-500"
                     >
                         <div class="text-gray-500 text-sm font-medium">
-                            Falhas
+                            Falhas (Failed)
                         </div>
                         <div class="mt-2 text-3xl font-bold text-gray-900">
                             {{ stats.failed }}
@@ -191,18 +191,12 @@ const props = defineProps({
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                                                 :class="{
-                                                    'bg-blue-100 text-blue-800':
+                                                    'bg-green-100 text-green-800':
                                                         ticket.status ===
                                                         'open',
                                                     'bg-yellow-100 text-yellow-800':
                                                         ticket.status ===
                                                         'pending',
-                                                    'bg-green-100 text-green-800':
-                                                        ticket.status ===
-                                                        'done',
-                                                    'bg-gray-100 text-gray-800':
-                                                        ticket.status ===
-                                                        'closed',
                                                     'bg-red-100 text-red-800':
                                                         ticket.status ===
                                                         'failed',
