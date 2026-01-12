@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\Project;
+use App\Models\Ticket;
 use App\Services\TicketService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,5 +41,20 @@ class TicketController extends Controller
             return back()
                 ->with('error', 'Houve um erro ao criar o ticket. Tente novamente.');
         }
+    }
+
+    public function show(Ticket $ticket): Response
+    {
+        // Garante que o usuário só veja seus próprios tickets (Segurança básica)
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403, 'Você não tem permissão para ver este ticket.');
+        }
+
+        // Carrega os detalhes e o projeto para exibir na tela
+        $ticket->load(['detail', 'project']);
+
+        return Inertia::render('Tickets/Show', [
+            'ticket' => $ticket
+        ]);
     }
 }

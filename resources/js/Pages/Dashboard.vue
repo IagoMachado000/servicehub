@@ -211,10 +211,11 @@ const recentTickets = [
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <Link
-                                            href="#"
+                                            :href="route('tickets.show', 50)"
                                             class="text-indigo-600 hover:text-indigo-900 font-medium"
-                                            >Detalhes</Link
                                         >
+                                            Detalhes
+                                        </Link>
                                     </td>
                                 </tr>
                             </tbody>

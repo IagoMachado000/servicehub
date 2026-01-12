@@ -23,10 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::prefix('tickets')->group(function () {
         Route::name('tickets')->group(function () {
             Route::get('/create', [TicketController::class, 'create'])->name('.create');
             Route::post('/store', [TicketController::class, 'store'])->name('.store');
+            Route::get('/show/{ticket}', [TicketController::class, 'show'])->name('.show');
         });
     });
 });
