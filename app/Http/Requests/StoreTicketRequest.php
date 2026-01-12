@@ -24,7 +24,7 @@ class StoreTicketRequest extends FormRequest
         return [
             'project_id' => ['required', 'exists:projects,id'],
             'title'      => ['required', 'string', 'max:255'],
-            'attachment_path' => ['nullable', 'file', 'mimes:json,txt', 'max:2048'],
+            'attachment' => ['nullable', 'file', 'mimes:json,txt', 'max:2048'],
             'description' => ['nullable', 'string'],
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\TicketProcessingJob;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -27,7 +28,6 @@ class TicketService
 
             // 1. Criar o Ticket
 
-            dd($data);
             $ticket = Ticket::create([
                 'project_id'      => $data['project_id'],
                 'user_id'         => $user->id,
@@ -39,10 +39,9 @@ class TicketService
             // 2. Criar o Detalhe (1:1)
             $ticket->detail()->create([
                 'description' => $data['description'] ?? null,
-                // processed_data será preenchido pelo Job futuramente
             ]);
 
-            // TODO: Aqui dispararemos o Job (TicketProcessingJob::dispatch($ticket))
+            TicketProcessingJob::dispatch($ticket);
 
             return $ticket;
         });
