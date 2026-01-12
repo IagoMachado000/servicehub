@@ -7,7 +7,7 @@ use App\Models\TicketDetail;
 use App\Models\User;
 use App\Models\UserProfile;
 
-test('company has many projects', function () {
+test('empresa tem muitos projetos', function () {
     $company = Company::factory()->create();
     $project = Project::factory()->for($company)->create();
 
@@ -15,14 +15,14 @@ test('company has many projects', function () {
         ->and($company->projects->first()->id)->toBe($project->id);
 });
 
-test('user has one profile', function () {
+test('o usuário tem um perfil', function () {
     $user = User::factory()->create();
     $profile = UserProfile::factory()->for($user)->create();
 
     expect($user->profile->id)->toBe($profile->id);
 });
 
-test('ticket belongs to a project and user', function () {
+test('O ticket pertence a um projeto e a um usuário.', function () {
     $project = Project::factory()->create();
     $user = User::factory()->create();
     $ticket = Ticket::factory()->for($project)->for($user)->create();
@@ -31,7 +31,7 @@ test('ticket belongs to a project and user', function () {
         ->and($ticket->user->id)->toBe($user->id);
 });
 
-test('ticket has one detail', function () {
+test('o ticket tem informações adicionais (details)', function () {
     $ticket = Ticket::factory()->create();
     $detail = TicketDetail::factory()->for($ticket)->create();
 
