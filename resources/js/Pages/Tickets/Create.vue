@@ -39,10 +39,10 @@ const handleFileUpload = (e) => {
                     Gestão de Tickets
                 </h2>
                 <Link
-                    :href="route('dashboard')"
+                    :href="route('tickets.index')"
                     class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
                 >
-                    &larr; Voltar ao Dashboard
+                    &larr; Voltar
                 </Link>
             </div>
         </template>
@@ -217,7 +217,7 @@ const handleFileUpload = (e) => {
                                 class="flex items-center justify-end gap-4 border-t border-gray-100 pt-6"
                             >
                                 <Link
-                                    :href="route('dashboard')"
+                                    :href="route('tickets.index')"
                                     class="text-sm text-gray-600 hover:text-gray-900"
                                 >
                                     Cancelar

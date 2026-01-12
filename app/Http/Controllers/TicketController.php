@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
+use App\Http\Resources\TicketResource;
 use App\Models\Project;
 use App\Models\Ticket;
 use App\Services\TicketService;
@@ -16,6 +17,19 @@ class TicketController extends Controller
     public function __construct(
         protected TicketService $ticketService
     ) {}
+
+    public function index()
+    {
+        // Busca os tickets do usuário logado, com relacionamentos necessários
+        // Ordena pelos mais recentes e pagina 10 por vez
+        $tickets = TicketResource::collection(
+            Ticket::with('project')->where('user_id', Auth::id())->latest()->paginate(10)
+        );
+
+        return Inertia::render('Tickets/Index', [
+            'tickets' => $tickets
+        ]);
+    }
 
     public function create(): Response
     {

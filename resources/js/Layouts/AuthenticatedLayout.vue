@@ -92,7 +92,7 @@ const bottomNavLinkClasses = (isActive) => {
                 </Link>
 
                 <Link
-                    :href="route('tickets.create')"
+                    :href="route('tickets.index')"
                     :class="sidebarLinkClasses(route().current('tickets.*'))"
                 >
                     <svg
@@ -255,7 +255,7 @@ const bottomNavLinkClasses = (isActive) => {
             </Link>
 
             <Link
-                :href="route('tickets.create')"
+                :href="route('tickets.index')"
                 :class="bottomNavLinkClasses(route().current('tickets.*'))"
             >
                 <svg

@@ -1,26 +1,42 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import Pagination from "@/Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
-// Recebendo os dados reais do Controller
-const props = defineProps({
-    stats: Object,
-    recentTickets: Object,
+// Recebemos a prop 'tickets' do controller (que é um objeto Paginator)
+defineProps({
+    tickets: Object,
 });
+
+// Função auxiliar para cor do status
+const statusColor = (status) => {
+    const colors = {
+        open: "bg-green-100 text-green-800",
+        pending: "bg-yellow-100 text-yellow-800",
+        failed: "bg-red-100 text-red-800",
+        // Fallbacks para nomes em português se sua base estiver assim
+        aberto: "bg-blue-100 text-blue-800",
+        em_andamento: "bg-yellow-100 text-yellow-800",
+        resolvido: "bg-green-100 text-green-800",
+        fechado: "bg-gray-100 text-gray-800",
+    };
+    return colors[status] || "bg-gray-100 text-gray-800";
+};
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Meus Tickets" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold leading-tight text-gray-900">
-                        Visão Geral
+                        Meus Tickets
                     </h2>
                     <p class="text-sm text-gray-500 mt-1">
-                        Bem-vindo de volta ao ServiceHub.
+                        Gerencie e acompanhe o status de todas as suas
+                        solicitações.
                     </p>
                 </div>
 
@@ -63,58 +79,9 @@ const props = defineProps({
         </div>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-                    <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-indigo-500"
-                    >
-                        <div class="text-gray-500 text-sm font-medium">
-                            Total Tickets
-                        </div>
-                        <div class="mt-2 text-3xl font-bold text-gray-900">
-                            {{ stats.total }}
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-400"
-                    >
-                        <div class="text-gray-500 text-sm font-medium">
-                            Na Fila (Pendente)
-                        </div>
-                        <div class="mt-2 text-3xl font-bold text-gray-900">
-                            {{ stats.pending }}
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500"
-                    >
-                        <div class="text-gray-500 text-sm font-medium">
-                            Processados (Open)
-                        </div>
-                        <div class="mt-2 text-3xl font-bold text-gray-900">
-                            {{ stats.open }}
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-red-500"
-                    >
-                        <div class="text-gray-500 text-sm font-medium">
-                            Falhas
-                        </div>
-                        <div class="mt-2 text-3xl font-bold text-gray-900">
-                            {{ stats.failed }}
-                        </div>
-                    </div>
-                </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">
-                            Tickets Recentes
-                        </h3>
-
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -127,7 +94,7 @@ const props = defineProps({
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                         >
-                                            Título
+                                            Assunto
                                         </th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -155,8 +122,9 @@ const props = defineProps({
                                     class="bg-white divide-y divide-gray-200"
                                 >
                                     <tr
-                                        v-for="ticket in recentTickets.data"
+                                        v-for="ticket in tickets.data"
                                         :key="ticket.id"
+                                        class="hover:bg-gray-50 transition duration-150 ease-in-out"
                                     >
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
@@ -175,18 +143,10 @@ const props = defineProps({
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                                :class="{
-                                                    'bg-green-100 text-green-800':
-                                                        ticket.status ===
-                                                        'open',
-                                                    'bg-yellow-100 text-yellow-800':
-                                                        ticket.status ===
-                                                        'pending',
-                                                    'bg-red-100 text-red-800':
-                                                        ticket.status ===
-                                                        'failed',
-                                                }"
+                                                :class="[
+                                                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                                                    statusColor(ticket.status),
+                                                ]"
                                             >
                                                 {{
                                                     ticket.status.toUpperCase()
@@ -208,14 +168,14 @@ const props = defineProps({
                                                         ticket.id
                                                     )
                                                 "
-                                                class="text-indigo-600 hover:text-indigo-900"
+                                                class="text-indigo-600 hover:text-indigo-900 font-semibold"
                                             >
                                                 Detalhes
                                             </Link>
                                         </td>
                                     </tr>
 
-                                    <tr v-if="recentTickets.data.length === 0">
+                                    <tr v-if="tickets.data.length === 0">
                                         <td
                                             colspan="6"
                                             class="px-6 py-12 text-center text-gray-500"
@@ -223,13 +183,18 @@ const props = defineProps({
                                             Nenhum ticket encontrado.
                                             <Link
                                                 :href="route('tickets.create')"
-                                                class="text-indigo-600 underline"
-                                                >Crie o primeiro!</Link
+                                                class="text-indigo-600 underline hover:text-indigo-800"
                                             >
+                                                Crie o primeiro!
+                                            </Link>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="mt-6">
+                            <Pagination :links="tickets.meta.links" />
                         </div>
                     </div>
                 </div>
