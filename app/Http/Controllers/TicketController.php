@@ -26,13 +26,18 @@ class TicketController extends Controller
 
     public function store(StoreTicketRequest $request): RedirectResponse
     {
-        $this->ticketService->createTicket(
-            user: $request->user(),
-            data: $request->validated(),
-            file: $request->file('attachment')
-        );
+        try {
+            $this->ticketService->createTicket(
+                user: $request->user(),
+                data: $request->validated(),
+                file: $request->file('attachment')
+            );
 
-        return to_route('tickets.create')
-            ->with('message', 'Ticket criado com sucesso! O processamento iniciará em breve.');
+            return to_route('dashboard')
+                ->with('message', 'Ticket criado. Em breve nossa equipe te responderá.');
+        } catch (\Throwable $e) {
+            return back()
+                ->with('error', 'Houve um erro ao criar o ticket. Tente novamente.');
+        }
     }
 }

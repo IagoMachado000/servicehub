@@ -10,10 +10,19 @@ class TicketDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ticket_id', 'description', 'processed_data'];
+    protected $fillable = [
+        'ticket_id',
+        'description',
+        'summary',
+        'keywords',
+        'sentiment_score',
+        'processed_at'
+    ];
 
     protected $casts = [
-        'processed_data' => 'array', // Cast automático para JSON
+        'keywords' => 'array',
+        'sentiment_score' => 'float',
+        'processed_at' => 'datetime',
     ];
 
     /**

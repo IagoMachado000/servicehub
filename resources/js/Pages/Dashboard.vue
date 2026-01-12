@@ -90,6 +90,21 @@ const recentTickets = [
             </div>
         </template>
 
+        <div
+            v-if="$page.props.flash.message"
+            class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4"
+        >
+            <div
+                class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                role="alert"
+            >
+                <strong class="font-bold">Sucesso! </strong>
+                <span class="block sm:inline">{{
+                    $page.props.flash.message
+                }}</span>
+            </div>
+        </div>
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
