@@ -179,7 +179,17 @@ Para iniciar o worker de filas:
 Após executar todos os passos acima, a aplicação estará disponível em:
 
 ```
+# Aplicação
 http://localhost
+
+# Servidor de E-mail
+http://localhost:8025
+
+# Login
+- Conectar no banco de dados
+- Abrir a tabela user
+- Pegar um e-mail
+- Usar a senha password padrão (para todos os usuários)
 ```
 
 _(ou na porta configurada no `docker-compose.yml`)_
