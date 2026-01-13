@@ -58,10 +58,10 @@ DB_PASSWORD=servicehub
 ### Configuração de E-mail (ambiente local)
 
 ```env
-MAIL_MAILER=log
+MAIL_MAILER=smtp
 MAIL_SCHEME=null
-MAIL_HOST=127.0.0.1
-MAIL_PORT=2525
+MAIL_HOST=mailpit
+MAIL_PORT=1025
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_FROM_ADDRESS="hello@example.com"
